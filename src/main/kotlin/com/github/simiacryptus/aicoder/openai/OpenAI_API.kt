@@ -13,6 +13,7 @@ import com.github.simiacryptus.aicoder.util.StringTools.restrictCharacterSet
 import com.github.simiacryptus.aicoder.util.UITools
 import com.google.common.util.concurrent.*
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProgressIndicator
@@ -78,45 +79,7 @@ object OpenAI_API {
 
     @Transient
     private var comboBox: ComboBox<CharSequence?>? = null
-    val modelSelector: JComponent
-        get() {
-            if (null != comboBox) {
-                val element = ComboBox(
-                    (IntStream.range(0, comboBox!!.itemCount)
-                        .mapToObj(comboBox!!::getItemAt)).collect(Collectors.toList()).toTypedArray()
-                )
-                activeModelUI[element] = Any()
-                return element
-            }
-            val apiKey: CharSequence = settingsState!!.apiKey
-            if (apiKey.toString().trim { it <= ' ' }.length > 0) {
-                try {
-                    comboBox = ComboBox(arrayOf<CharSequence?>(
-                        settingsState!!.model_completion,
-                        settingsState!!.model_edit
-                    ))
-                    activeModelUI[comboBox] = Any()
-                    onSuccess(
-                        engines
-                    ) { engines: ObjectNode ->
-                        val data = engines["data"]
-                        val items =
-                            arrayOfNulls<CharSequence>(data.size())
-                        for (i in 0 until data.size()) {
-                            items[i] = data[i]["id"].asText()
-                        }
-                        Arrays.sort(items)
-                        activeModelUI.keys.forEach(Consumer { ui: ComboBox<CharSequence?> ->
-                            Arrays.stream(items).forEach(ui::addItem)
-                        })
-                    }
-                    return comboBox!!
-                } catch (e: Throwable) {
-                    log.warn(e)
-                }
-            }
-            return JBTextField()
-        }
+
 
     fun complete(project: Project?, request: CompletionRequest, indent: CharSequence): ListenableFuture<CharSequence> {
         return complete(project, request, filterStringResult(indent))
@@ -171,7 +134,7 @@ object OpenAI_API {
         val settings = settingsState
         val withModel = completionRequest.uiIntercept()
         withModel.fixup(settings!!)
-        return complete(project, CompletionRequest(withModel), settings, withModel.model)
+        return complete(project, CompletionRequest(withModel), settings)
     }
 
     private fun edit(project: Project, request: EditRequest): ListenableFuture<CompletionResponse> {
@@ -188,7 +151,7 @@ object OpenAI_API {
                 val task: Task.WithResult<CompletionResponse, Exception?> =
                     object : Task.WithResult<CompletionResponse, Exception?>(
                         project,
-                        "Text Completion",
+                        "AI生成中...",
                         false
                     ) {
                         override fun compute(indicator: ProgressIndicator): CompletionResponse {
@@ -239,6 +202,26 @@ object OpenAI_API {
         }
     }
 
+    @Throws(IOException::class)
+    private fun processChatApiResult(result: String, request: CompletionRequest): CompletionResponse {
+        val jsonObject = Gson().fromJson(
+            result,
+            JsonObject::class.java
+        )
+        var result = jsonObject.getAsJsonArray("output").get(0).asString
+        if (request.stop != null) {
+            for (stop in request.stop!!){
+                if (stop != null) {
+                    result = result.replace(stop.toString(), "")
+                }
+            }
+        }
+        var choice = Choice(result,0,null,"")
+        var response =  CompletionResponse()
+        response.choices = arrayOf(choice)
+        return response
+    }
+
     /**
      * Processes the response from the server.
      *
@@ -268,11 +251,23 @@ object OpenAI_API {
         return completionResponse
     }
 
+    private fun createRequest(query: String): String {
+        val gson = Gson()
+        val jsonObject = JsonObject()
+        jsonObject.addProperty("engine", "chat-api")
+        val queryObject = JsonObject()
+        queryObject.addProperty("conversation_id", UUID.randomUUID().toString())
+        queryObject.addProperty("query", query)
+        queryObject.add("history", gson.fromJson("[]", JsonArray::class.java))
+        queryObject.add("payload", gson.fromJson("{}", JsonObject::class.java))
+        jsonObject.add("query", queryObject)
+        return gson.toJson(jsonObject)
+    }
+
     private fun complete(
         project: Project?,
         completionRequest: CompletionRequest,
-        settings: AppSettingsState,
-        model: String
+        settings: AppSettingsState
     ): ListenableFuture<CompletionResponse> {
         val canBeCancelled =
             true // Cancel doesn't seem to work; the cancel event is only dispatched after the request completes.
@@ -281,7 +276,7 @@ object OpenAI_API {
                 project,
                 object : Task.WithResult<CompletionResponse, Exception?>(
                     project,
-                    "Text Completion",
+                    "AI生成中...",
                     canBeCancelled
                 ) {
                     var threadRef =
@@ -298,14 +293,16 @@ object OpenAI_API {
                         threadRef.getAndSet(Thread.currentThread())
                         try {
                             logStart(completionRequest, settings)
-                            val request: String = restrictCharacterSet(mapper.writeValueAsString(completionRequest), allowedCharset)
-                            val result =
-                                post(settings.apiBase + "/engines/" + model + "/completions", request)
-                            val completionResponse = processResponse(result, settings)
-                            val completionResult = StringTools.stripPrefix(
+                            val request: String = completionRequest.prompt
+                            log.info(request)
+                            val result = post(settings.apiBase, createRequest(request))
+                            val completionResponse = processChatApiResult(result, completionRequest)
+                            var completionResult = StringTools.stripPrefix(
                                 completionResponse.firstChoice.orElse("").toString().trim { it <= ' ' },
                                 completionRequest.prompt.trim { it <= ' ' })
+
                             logComplete(completionResult, settings)
+                            completionResponse.choices[0].text = completionResult.toString()
                             return completionResponse
                         } catch (e: IOException) {
                             log.error(e)
@@ -393,58 +390,6 @@ object OpenAI_API {
             object : Task.WithResult<ListenableFuture<*>, Exception?>(project, "Moderation", false) {
                 override fun compute(indicator: ProgressIndicator): ListenableFuture<*> {
                     return pool.submit {
-                        val body: String
-                        body = try {
-                            mapper.writeValueAsString(
-                                Map.of(
-                                    "input",
-                                    restrictCharacterSet(text, allowedCharset)
-                                )
-                            )
-                        } catch (e: JsonProcessingException) {
-                            throw RuntimeException(e)
-                        }
-                        val settings1: AppSettingsState = settingsState!!
-                        val result: String
-                        result = try {
-                            post(settings1.apiBase + "/moderations", body)
-                        } catch (e: IOException) {
-                            throw RuntimeException(e)
-                        } catch (e: InterruptedException) {
-                            throw RuntimeException(e)
-                        }
-                        val jsonObject =
-                            Gson().fromJson(
-                                result,
-                                JsonObject::class.java
-                            )
-                        if (jsonObject.has("error")) {
-                            val errorObject = jsonObject.getAsJsonObject("error")
-                            throw RuntimeException(IOException(errorObject["message"].asString))
-                        }
-                        val moderationResult =
-                            jsonObject.getAsJsonArray("results")[0].asJsonObject
-                        log(
-                            LogLevel.Debug,
-                            String.format(
-                                "Moderation Request\nText:\n%s\n\nResult:\n%s",
-                                text.replace("\n", "\n\t"),
-                                result
-                            )
-                        )
-                        if (moderationResult["flagged"].asBoolean) {
-                            val categoriesObj =
-                                moderationResult["categories"].asJsonObject
-                            throw RuntimeException(
-                                ModerationException(
-                                    "Moderation flagged this request due to " + categoriesObj.keySet()
-                                        .stream().filter { c: String? ->
-                                            categoriesObj[c].asBoolean
-                                        }.reduce { a: String, b: String -> "$a, $b" }
-                                        .orElse("???")
-                                )
-                            )
-                        }
                     }
                 }
             },
@@ -480,7 +425,7 @@ object OpenAI_API {
                     clients[Thread.currentThread()] = httpClient
                     val response: HttpResponse = httpClient.execute(request)
                     val entity = response.entity
-                    return EntityUtils.toString(entity)
+                    return EntityUtils.toString(entity, "utf-8")
                 }
             } finally {
                 clients.remove(Thread.currentThread())
@@ -500,7 +445,7 @@ object OpenAI_API {
         request.addHeader("Content-Type", "application/json")
         request.addHeader("Accept", "application/json")
         authorize(request)
-        request.entity = StringEntity(json)
+        request.entity = StringEntity(json, ContentType.APPLICATION_JSON)
         return request
     }
 
@@ -518,18 +463,18 @@ object OpenAI_API {
 
     @Throws(IOException::class)
     private fun authorize(request: HttpRequestBase) {
-        val settingsState = settingsState
-        var apiKey: CharSequence = settingsState!!.apiKey
-        if (apiKey.length == 0) {
-            synchronized(settingsState) {
-                apiKey = settingsState.apiKey
-                if (apiKey.length == 0) {
-                    apiKey = UITools.queryAPIKey()!!
-                    settingsState.apiKey = apiKey.toString()
-                }
-            }
-        }
-        request.addHeader("Authorization", "Bearer $apiKey")
+//        val settingsState = settingsState
+//        var apiKey: CharSequence = settingsState!!.apiKey
+//        if (apiKey.length == 0) {
+//            synchronized(settingsState) {
+//                apiKey = settingsState.apiKey
+//                if (apiKey.length == 0) {
+//                    apiKey = UITools.queryAPIKey()!!
+//                    settingsState.apiKey = apiKey.toString()
+//                }
+//            }
+//        }
+//        request.addHeader("Authorization", "Bearer $apiKey")
     }
 
     /**

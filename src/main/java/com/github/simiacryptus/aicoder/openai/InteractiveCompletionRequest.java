@@ -22,12 +22,7 @@ public class InteractiveCompletionRequest {
     @SuppressWarnings("unused")
     @Name("Suffix")
     public final JBTextArea suffix;
-    @SuppressWarnings("unused")
-    @Name("Model")
-    public final JComponent model = OpenAI_API.INSTANCE.getModelSelector();
-    @SuppressWarnings("unused")
-    @Name("Temperature")
-    public final JBTextField temperature = new JBTextField(8);
+
     @SuppressWarnings("unused")
     @Name("Max Tokens")
     public final JBTextField max_tokens = new JBTextField(8);
@@ -37,7 +32,7 @@ public class InteractiveCompletionRequest {
         testRequest = new JButton(new AbstractAction("Test Request") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CompletionRequest.@NotNull CompletionRequestWithModel withModel = new CompletionRequest.CompletionRequestWithModel(parent, AppSettingsState.getInstance().model_completion);
+                CompletionRequest.@NotNull CompletionRequestWithModel withModel = new CompletionRequest.CompletionRequestWithModel(parent);
                 UITools.INSTANCE.readUI(InteractiveCompletionRequest.this, withModel);
                 @NotNull ListenableFuture<CharSequence> future = OpenAI_API.INSTANCE.complete(null, withModel, "");
                 testRequest.setEnabled(false);

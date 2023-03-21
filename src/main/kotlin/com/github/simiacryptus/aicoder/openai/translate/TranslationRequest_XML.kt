@@ -24,7 +24,6 @@ class TranslationRequest_XML(settings: AppSettingsState) :
             $exampleStr
             <$outputTagTxt$outputAttrStr>
             """.trimIndent().trim(),
-            temperature,
             maxTokens,
             null,
             """</$outputTagTxt>"""

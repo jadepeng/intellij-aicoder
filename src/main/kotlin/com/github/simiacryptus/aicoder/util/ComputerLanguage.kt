@@ -6,7 +6,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import java.util.*
 
 enum class ComputerLanguage(configuration: Configuration) {
-    Java(
+     Java(
         Configuration()
             .setDocumentationStyle("JavaDoc")
             .setLineComments(LineComment.Factory("//"))

@@ -64,7 +64,6 @@ class ProxyTest {
         class TestGPTInterfaceProxy : GPTInterfaceProxy() {
             init {
                 val settings = AppSettingsState()
-                settings.apiKey = FileUtil.loadFile(keyFile).trim()
                 OpenAI_API.lastFetchedSettingsState = Long.MAX_VALUE
                 OpenAI_API.settings = settings
             }
@@ -73,7 +72,6 @@ class ProxyTest {
                 println(prompt)
                 val request = CompletionRequest().appendPrompt(prompt)
                 request.max_tokens = 1000
-                request.temperature = 0.7
                 val completion = OpenAI_API.complete(null, request, "").get().toString()
                 println(completion)
                 return completion

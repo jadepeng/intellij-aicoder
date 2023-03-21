@@ -16,17 +16,13 @@ import java.util.Arrays;
 
 public class InteractiveEditRequest {
     @SuppressWarnings("unused")
-    @Name("Input")
+    @Name("输入")
     public final @NotNull JBScrollPane input;
     @SuppressWarnings("unused")
-    @Name("Instruction")
+    @Name("指令")
     public final JBTextArea instruction;
     @SuppressWarnings("unused")
-    @Name("Model")
-    public final JComponent model = OpenAI_API.INSTANCE.getModelSelector();
-    @SuppressWarnings("unused")
-    @Name("Temperature")
-    public final JBTextField temperature = new JBTextField(8);
+
     public final @NotNull JButton testRequest;
 
     public InteractiveEditRequest(@NotNull EditRequest parent) {

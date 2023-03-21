@@ -27,9 +27,6 @@ interface TranslationRequest {
     val originalText: CharSequence?
 
     @get:Suppress("unused")
-    val temperature: Double
-
-    @get:Suppress("unused")
     val maxTokens: Int
 
     fun setInputType(inputTag: CharSequence?): TranslationRequest
@@ -40,9 +37,6 @@ interface TranslationRequest {
     fun addExample(exampleText: CharSequence, attributes: Map<CharSequence, CharSequence> = HashMap()): TranslationRequest
 
     fun setInputText(originalText: CharSequence?): TranslationRequest
-
-    @Suppress("unused")
-    fun setTemperature(temperature: Double): TranslationRequest
 
     @Suppress("unused")
     fun setMaxTokens(maxTokens: Int): TranslationRequest

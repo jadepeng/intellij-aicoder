@@ -28,23 +28,19 @@ import java.util.stream.Collectors;
 )
 public class AppSettingsState implements PersistentStateComponent<AppSettingsState> {
 
-    public @NotNull String apiBase = "https://api.openai.com/v1";
-    public @NotNull String apiKey = "";
-    public @NotNull String model_completion = "text-davinci-003";
-    public @NotNull String model_edit = "text-davinci-edit-001";
+    public @NotNull String apiBase = "http://172.31.221.49:8080/query";
     public int maxTokens = 1000;
-    public double temperature = 0.1;
     public @NotNull String style = "";
     @SuppressWarnings("unused")
     public int tokenCounter = 0;
     private final @NotNull Map<String, Integer> mostUsedHistory = new HashMap<>();
     private final @NotNull List<String> mostRecentHistory = new ArrayList<>();
     public int historyLimit = 10;
-    public @NotNull String humanLanguage = "English";
+    public @NotNull String humanLanguage = "Chinese";
     public int maxPrompt = 5000;
     public @NotNull TranslationRequestTemplate translationRequestTemplate = TranslationRequestTemplate.XML;
     public @NotNull LogLevel apiLogLevel = LogLevel.Debug;
-    public boolean devActions = false;
+    public boolean devActions = true;
     public boolean suppressProgress = false;
     public int apiThreads = 4;
 
@@ -86,12 +82,8 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
         @NotNull AppSettingsState that = (AppSettingsState) o;
         if (maxTokens != that.maxTokens) return false;
         if (maxPrompt != that.maxPrompt) return false;
-        if (Double.compare(that.temperature, temperature) != 0) return false;
         if (!Objects.equals(humanLanguage, that.humanLanguage)) return false;
         if (!Objects.equals(apiBase, that.apiBase)) return false;
-        if (!Objects.equals(apiKey, that.apiKey)) return false;
-        if (!Objects.equals(model_completion, that.model_completion)) return false;
-        if (!Objects.equals(model_edit, that.model_edit)) return false;
         if (!Objects.equals(translationRequestTemplate, that.translationRequestTemplate)) return false;
         if (!Objects.equals(apiLogLevel, that.apiLogLevel)) return false;
         if (!Objects.equals(devActions, that.devActions)) return false;
@@ -101,7 +93,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
     @Override
     public int hashCode() {
-        return Objects.hash(apiBase, apiKey, model_completion, model_edit, maxTokens, temperature, translationRequestTemplate, apiLogLevel, devActions, suppressProgress, style);
+        return Objects.hash(apiBase, maxTokens, translationRequestTemplate, apiLogLevel, devActions, suppressProgress, style);
     }
 
     public void addInstructionToHistory(@NotNull CharSequence instruction) {

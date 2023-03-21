@@ -5,7 +5,6 @@ import java.util.*
 
 abstract class BaseTranslationRequest<T : BaseTranslationRequest<T>>(settings: AppSettingsState) : TranslationRequest {
     init {
-        setTemperature(settings.temperature)
         setMaxTokens(settings.maxTokens)
     }
 
@@ -16,7 +15,6 @@ abstract class BaseTranslationRequest<T : BaseTranslationRequest<T>>(settings: A
     override val outputAttr: MutableMap<CharSequence?, CharSequence> = HashMap()
 
     override var originalText: CharSequence? = null
-    override var temperature = 0.0
     override var maxTokens = 0
 
     override fun setInputType(inputTag: CharSequence?): T {
@@ -39,10 +37,6 @@ abstract class BaseTranslationRequest<T : BaseTranslationRequest<T>>(settings: A
         return this as T
     }
 
-    override fun setTemperature(temperature: Double): T {
-        this.temperature = temperature
-        return this as T
-    }
 
     override fun setMaxTokens(maxTokens: Int): T {
         this.maxTokens = maxTokens

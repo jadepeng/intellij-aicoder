@@ -24,6 +24,7 @@ version = properties("pluginVersion")
 
 // Configure project's dependencies
 repositories {
+    mavenLocal()
     mavenCentral()
     maven(url = "https://packages.jetbrains.team/maven/p/ij/intellij-dependencies")
 }

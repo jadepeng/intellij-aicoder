@@ -61,29 +61,30 @@ public class AppSettingsComponent {
     @SuppressWarnings("unused")
     @Name("API Log Level")
     public final ComboBox<String> apiLogLevel = new ComboBox<>(Arrays.stream(LogLevel.values()).map(Enum::name).toArray(String[]::new));
-
+//
+//    @SuppressWarnings("unused")
+//    @Name("Temperature")
+//    public final JBTextField temperature = new JBTextField();
     @SuppressWarnings("unused")
-    @Name("Temperature")
-    public final JBTextField temperature = new JBTextField();
-    @SuppressWarnings("unused")
-    @Name("Max Tokens")
+    @Name("最大Tokens数量")
     public final JBTextField maxTokens = new JBTextField();
     @SuppressWarnings("unused")
-    @Name("Max Prompt (Characters)")
+    @Name("最大Prompt单词数")
     public final JBTextField maxPrompt = new JBTextField();
-    @SuppressWarnings("unused")
-    @Name("Completion Model")
-    public final JComponent model_completion = OpenAI_API.INSTANCE.getModelSelector();
-    @Name("Edit Model")
-    public final JComponent model_edit = OpenAI_API.INSTANCE.getModelSelector();
+//    @SuppressWarnings("unused")
+//    @Name("Completion Model")
+//    public final JComponent model_completion = OpenAI_API.INSTANCE.getModelSelector();
+//    @Name("Edit Model")
+//    public final JComponent model_edit = OpenAI_API.INSTANCE.getModelSelector();
 
-    @Name("API Threads")
+    @Name("API线程数量")
     public final JBTextField apiThreads = new JBTextField();
 
-    @Name("API Key")
-    public final JBPasswordField apiKey = new JBPasswordField();
+//    @Name("API Key")
+//    public final JBPasswordField apiKey = new JBPasswordField();
+//
     @SuppressWarnings("unused")
-    @Name("API Base")
+    @Name("API服务地址")
     public final JBTextField apiBase = new JBTextField();
 
     public AppSettingsComponent() {
@@ -91,7 +92,7 @@ public class AppSettingsComponent {
     }
 
     public @NotNull JComponent getPreferredFocusedComponent() {
-        return apiKey;
+        return apiBase;
     }
 
 }

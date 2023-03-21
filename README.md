@@ -1,28 +1,26 @@
-# intellij-aicoder
-
-![Build](https://github.com/SimiaCryptus/intellij-aicoder/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/20724-ai-coding-assistant.svg)](https://plugins.jetbrains.com/plugin/20724-ai-coding-assistant)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/20724-ai-coding-assistant.svg)](https://plugins.jetbrains.com/plugin/20724-ai-coding-assistant)
+# intellij-aicoder-free
 
 <!-- Plugin description -->
 
-Behold, a revolutionary new plugin for code editors that useth the power of artificial intelligence to make coding swifter and simpler. 'Tis compatible with popular autocomplete-based AI plugins such as GitHub Copilot and AWS CodeWhisperer, and is explicitly invoked through the context menu.
+免费的AI编程助手
 
-To use AI Coding Assistant, thou must possess an OpenAI access token. With this token, thou canst access a variety of features, including generics and system-wide functions, Markdown support, and general code editing.
+这是一款革命性的新代码编辑器插件，利用人工智能的力量使编程更快速、更简单。
 
-# Plaintext Actions
+修改自：https://github.com/SimiaCryptus/intellij-aicoder
+
+# 文本 Actions
 
 Plaintext actions provide text processing features for any language. The following actions are available for plaintext in the AI Coder plugin:
 
-| Text | Description |
-| --- | --- |
-| Append Text |  The `Append Text` action allows you to quickly append text to the end of the current selection. This is useful to quickly add to the document based on a user-determined prompting context. For example, if you have a document that contains a list of items, you can use the `Append Text` action to quickly add additional items to the list. Additionally, you can use the `Append Text` action to quickly add additional text to the end of a sentence or paragraph. This can be useful for quickly adding additional details or context to a document.  |
-| Dictation |  The `Dictation` action allows you to speak into the microphone and have the text automatically inserted into the document. This uses OpenAI's Whisper API.  |
-| Edit Text... |  The `Edit Text` action allows you to edit the text in the current selection based on an Ad-hoc directive. For example, you can translate, summarize, and correct errors.  |
-| Insert Text |  The `Insert Text` action allows you to quickly insert text at the cursor position. It automatically captures some preceding and following context for the text completion API to make the most accurate suggestions. For example, if you type ‘I had a day’ and place the cursor after 'a' and then use the `Insert Text` action, the API will suggest words like ‘great’, ‘bad’, or ‘delicious’.  |
+| Text              | Description |
+|-------------------| --- |
+| 补全文本              |  The `Append Text` action allows you to quickly append text to the end of the current <br/>selection. This is useful to quickly add to the document based on a user-determined prompting context. For example, if you have a document that contains a list of items, you can use the `Append Text` action to quickly add additional items to the list. Additionally, you can use the `Append Text` action to quickly add additional text to the end of a sentence or paragraph. This can be useful for quickly adding additional details or context to a document.  |
+| Dictation         |  The `Dictation` action allows you to speak into the microphone and have the text automatically inserted into the document. This uses OpenAI's Whisper API.  |
+| Edit Text...      |  The `Edit Text` action allows you to edit the text in the current selection based on an Ad-hoc directive. For example, you can translate, summarize, and correct errors.  |
+| Insert Text       |  The `Insert Text` action allows you to quickly insert text at the cursor position. It automatically captures some preceding and following context for the text completion API to make the most accurate suggestions. For example, if you type ‘I had a day’ and place the cursor after 'a' and then use the `Insert Text` action, the API will suggest words like ‘great’, ‘bad’, or ‘delicious’.  |
 | Recent Text Edits |  The `Recent Text Edits` group allows you to quickly access your most recent text edits. This is useful for quickly accessing your most recent edits.  |
-| Redo Last |  The `Redo Last` action allows you to quickly redo the last action you performed. This is useful for getting variations from the generative AI. For example, if you generate something and want to see an alternate, you can use the `Redo Last` action to quickly retry without having to start from scratch.  |
-| Replace Options |  The `Replace Options` action allows you to quickly replace selected text with one of a set of suggested options. This also captures some preceding and following context, but uses a different prompting method to suggest the options. For example, if you type ‘I had a day’ and place the cursor after 'a' and then use the `Replace Options` action, the plugin will **_provide an interactive selection UI_** to suggest words like ‘great’, ‘bad’, or ‘delicious’.  |
+| Redo Last         |  The `Redo Last` action allows you to quickly redo the last action you performed. This is useful for getting variations from the generative AI. For example, if you generate something and want to see an alternate, you can use the `Redo Last` action to quickly retry without having to start from scratch.  |
+| Replace Options   |  The `Replace Options` action allows you to quickly replace selected text with one of a set of suggested options. This also captures some preceding and following context, but uses a different prompting method to suggest the options. For example, if you type ‘I had a day’ and place the cursor after 'a' and then use the `Replace Options` action, the plugin will **_provide an interactive selection UI_** to suggest words like ‘great’, ‘bad’, or ‘delicious’.  |
 
 # Code Actions
 
@@ -73,19 +71,14 @@ Some actions are only available when the plugin is running in developer mode. Th
 
 <!-- Plugin description end -->
 
-## Installation
+## 安装
 
-- Using IDE built-in plugin system:
-  
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "intellij-aicoder"</kbd> >
-  <kbd>Install Plugin</kbd>
-  
+
 - Manually:
-
-  Download the [latest release](https://github.com/SimiaCryptus/intellij-aicoder/releases/latest) and install it manually using
+  下载插件包，在设置里手动安装
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
-## Usage
+## 使用
 
 After installation, edit the settings and add your API key. If desired, customize your style!
 ![aicoder_settings.png](docs/aicoder_settings.png)

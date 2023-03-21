@@ -51,12 +51,11 @@ object UITools {
     }
 
     fun startProgress(): ProgressIndicator? {
-        if(1==1) return null;
         if (AppSettingsState.getInstance().suppressProgress) return null
         val progressIndicator = ProgressManager.getInstance().progressIndicator
         if (null != progressIndicator) {
             progressIndicator.isIndeterminate = true
-            progressIndicator.text = "Talking to OpenAI..."
+            progressIndicator.text = "调用AI中..."
         }
         return progressIndicator
     }

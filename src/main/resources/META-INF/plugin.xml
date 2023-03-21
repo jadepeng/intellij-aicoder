@@ -1,9 +1,8 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.simiacryptus.intellijopenaicodeassist</id>
-    <name>AI Coding Assistant</name>
-    <vendor url="https://blog.simiacrypt.us/">SimiaCryptus Software</vendor>
-
+    <name>Free AI Coding Assistant</name>
+    <vendor url="https://github.com/jadepeng/intellij-aicoder">intellij-aicoder</vendor>
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -32,25 +31,25 @@
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
         </group>
 
-        <action class="com.github.simiacryptus.aicoder.actions.dev.PrintTreeAction"
-                text="Print PSI Tree"
-                description="Print PSI Tree">
-            <!--DOC
-        The `Print PSI Tree` action allows you to print the PSI tree for the current file.
-        This is useful for debugging and understanding the PSI tree for a file.
-        This is a developer tool and is only visible if the `Developer Mode` setting is enabled.
-            -->
-            <add-to-group group-id="com.github.simiacryptus.aicoder.EditorMenu" anchor="first"/>
-        </action>
+<!--        <action class="com.github.simiacryptus.aicoder.actions.dev.PrintTreeAction"-->
+<!--                text="Print PSI Tree"-->
+<!--                description="Print PSI Tree">-->
+<!--            &lt;!&ndash;DOC-->
+<!--        The `Print PSI Tree` action allows you to print the PSI tree for the current file.-->
+<!--        This is useful for debugging and understanding the PSI tree for a file.-->
+<!--        This is a developer tool and is only visible if the `Developer Mode` setting is enabled.-->
+<!--            &ndash;&gt;-->
+<!--            <add-to-group group-id="com.github.simiacryptus.aicoder.EditorMenu" anchor="first"/>-->
+<!--        </action>-->
 
-        <action class="com.github.simiacryptus.aicoder.actions.markdown.ToStatementListAction"
-                text="To Statement List"
-                description="To statement list">
-            <!--DOC
-        The `To Statement List` action allows you to convert the selected text into a list of statements.
-            -->
-            <add-to-group group-id="com.github.simiacryptus.aicoder.EditorMenu" anchor="first"/>
-        </action>
+<!--        <action class="com.github.simiacryptus.aicoder.actions.markdown.ToStatementListAction"-->
+<!--                text="To Statement List"-->
+<!--                description="To statement list">-->
+<!--            &lt;!&ndash;DOC-->
+<!--        The `To Statement List` action allows you to convert the selected text into a list of statements.-->
+<!--            &ndash;&gt;-->
+<!--            <add-to-group group-id="com.github.simiacryptus.aicoder.EditorMenu" anchor="first"/>-->
+<!--        </action>-->
 
         <action class="com.github.simiacryptus.aicoder.actions.dev.RecursiveToStatementListAction"
                 text="Recursive To Statement List"
@@ -80,14 +79,14 @@
             <add-to-group group-id="com.github.simiacryptus.aicoder.EditorMenu" anchor="first"/>
         </action>
 
-        <action class="com.github.simiacryptus.aicoder.actions.generic.DictationAction"
-                text="Dictation"
-                description="Voice to text dictation">
-            <!--DOC
-        The `Dictation` action allows you to speak into the microphone and have the text automatically inserted into the document. This uses OpenAI's Whisper API.
-            -->
-            <add-to-group group-id="com.github.simiacryptus.aicoder.EditorMenu" anchor="first"/>
-        </action>
+<!--        <action class="com.github.simiacryptus.aicoder.actions.generic.DictationAction"-->
+<!--                text="听写"-->
+<!--                description="Voice to text dictation">-->
+<!--            &lt;!&ndash;DOC-->
+<!--        The `Dictation` action allows you to speak into the microphone and have the text automatically inserted into the document. This uses OpenAI's Whisper API.-->
+<!--            &ndash;&gt;-->
+<!--            <add-to-group group-id="com.github.simiacryptus.aicoder.EditorMenu" anchor="first"/>-->
+<!--        </action>-->
 
         <action class="com.github.simiacryptus.aicoder.actions.generic.ReplaceOptionsAction"
                 text="Replace Optio_ns"
@@ -104,7 +103,7 @@
             <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta I" second-keystroke="N"/>
         </action>
         <action class="com.github.simiacryptus.aicoder.actions.generic.InsertAction"
-                text="In_sert Text"
+                text="自动补写文本In_sert Text"
                 description="Insert text">
             <!--DOC
         The `Insert Text` action allows you to quickly insert text at the cursor position.
@@ -134,7 +133,7 @@
             <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta I" second-keystroke="A"/>
         </action>
         <action class="com.github.simiacryptus.aicoder.actions.generic.EditAction"
-                text="_Edit Text..."
+                text="编辑_Edit文本..."
                 description="Edit Text (Generic)">
             <!--DOC
         The `Edit Text` action allows you to edit the text in the current selection based on an Ad-hoc directive.
@@ -145,20 +144,20 @@
             <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta I" second-keystroke="E"/>
         </action>
 
-        <action class="com.github.simiacryptus.aicoder.actions.code.RewordCommentAction"
-                text="Re_word Comment"
-                description="Reword comment">
-            <!--DOC
-        The `Reword Comment` action allows you to quickly reword a comment in your code.
-        This is useful for quickly refactoring your code and making it easier to understand.
-        This is useful for managing and writing code comments.
-            -->
-            <add-to-group group-id="com.github.simiacryptus.aicoder.EditorMenu" anchor="first"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="shift control Q" second-keystroke="W"/>
-            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta I" second-keystroke="W"/>
-        </action>
+<!--        <action class="com.github.simiacryptus.aicoder.actions.code.RewordCommentAction"-->
+<!--                text="Re_word Comment"-->
+<!--                description="Reword comment">-->
+<!--            &lt;!&ndash;DOC-->
+<!--        The `Reword Comment` action allows you to quickly reword a comment in your code.-->
+<!--        This is useful for quickly refactoring your code and making it easier to understand.-->
+<!--        This is useful for managing and writing code comments.-->
+<!--            &ndash;&gt;-->
+<!--            <add-to-group group-id="com.github.simiacryptus.aicoder.EditorMenu" anchor="first"/>-->
+<!--            <keyboard-shortcut keymap="$default" first-keystroke="shift control Q" second-keystroke="W"/>-->
+<!--            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta I" second-keystroke="W"/>-->
+<!--        </action>-->
         <action class="com.github.simiacryptus.aicoder.actions.code.TranslateCommentAction"
-                text="Trans_late Comment"
+                text="翻译注释"
                 description="Translate comment">
             <!--DOC
         The `Translate Comment` action allows you to quickly translate a comment in your code.
@@ -258,7 +257,7 @@
         </group>
 
         <action class="com.github.simiacryptus.aicoder.actions.code.FromHumanLanguageAction"
-                text="_From Text"
+                text="选中文本转换为代码"
                 description="Implement text -&gt; code">
             <!--DOC
         The `From Text` action allows you to quickly convert text into code.
@@ -269,7 +268,7 @@
             <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta I" second-keystroke="F"/>
         </action>
         <action class="com.github.simiacryptus.aicoder.actions.code.ToHumanLanguageAction"
-                text="_To Text"
+                text="转为文本描述"
                 description="Describe code -&gt; text">
             <!--DOC
         The `To Text` action allows you to quickly convert code into text.
@@ -281,7 +280,7 @@
         </action>
 
         <action class="com.github.simiacryptus.aicoder.actions.code.PsiClassContextAction"
-                text="Insert _Implementation"
+                text="将注释实现为代码"
                 description="Insert implementation">
             <!--DOC
         The `Insert Implementation` action allows you to quickly insert the implementation of a comment.
@@ -292,7 +291,7 @@
             <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta I" second-keystroke="I"/>
         </action>
         <action class="com.github.simiacryptus.aicoder.actions.code.DescribeAction"
-                text="Describe C_ode and Prepend Comment"
+                text="描述代码并添加注释"
                 description="Add doc comments">
             <!--DOC
         The `Describe Code and Prepend Comment` action allows you to quickly add a comment to your code that describes
@@ -304,7 +303,7 @@
             <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta I" second-keystroke="O"/>
         </action>
         <action class="com.github.simiacryptus.aicoder.actions.code.QuestionAction"
-                text="Ask a _question about the code"
+                text="询问问题深入了解代码"
                 description="Ask a question about the code">
             <!--DOC
         The `Ask a question about the code` action allows you to quickly ask a question about the code.
@@ -316,7 +315,7 @@
             <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta I" second-keystroke="Q"/>
         </action>
         <action class="com.github.simiacryptus.aicoder.actions.code.CommentsAction"
-                text="Add Code _Comments"
+                text="为代码添加逐行注释"
                 description="Add code comments">
             <!--DOC
         The `Add Code Comments` action allows you to quickly add comments to selected code.
@@ -328,7 +327,7 @@
             <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta I" second-keystroke="C"/>
         </action>
         <action class="com.github.simiacryptus.aicoder.actions.code.RenameVariablesAction"
-                text="Rename _Variables"
+                text="重命名变量_V"
                 description="Rename variables">
             <!--DOC
         The `Rename Variables` action allows you to quickly rename variables in your code.
@@ -340,7 +339,7 @@
             <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta I" second-keystroke="V"/>
         </action>
         <action class="com.github.simiacryptus.aicoder.actions.code.DocAction"
-                text="Add D_oc Comments"
+                text="添加doc注释"
                 description="Add code comments">
             <!--DOC
         The `Add Doc Comments` action allows you to quickly add comments to your code that are formatted for
@@ -354,7 +353,7 @@
         </action>
 
         <action class="com.github.simiacryptus.aicoder.actions.code.PasteAction"
-                text="_Paste" description="Paste">
+                text="粘贴代码" description="Paste">
             <!--DOC
         The `Paste` action allows you to quickly paste code into your project.
         This text will be translated into the current language.
@@ -365,7 +364,7 @@
             <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="meta I" second-keystroke="P"/>
         </action>
         <action class="com.github.simiacryptus.aicoder.actions.generic.RedoLast"
-                text="Re_do Last"
+                text="重做上一次"
                 description="Redo last">
             <!--DOC
         The `Redo Last` action allows you to quickly redo the last action you performed.
@@ -379,7 +378,7 @@
         </action>
 
         <action class="com.github.simiacryptus.aicoder.actions.code.ImplementAction"
-                text="_Implement Stub"
+                text="实现(_I)方法"
                 description="Implement stub">
             <!--DOC
         The `Implement Stub` action allows you to quickly implement a stub of a method.

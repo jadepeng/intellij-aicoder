@@ -16,7 +16,7 @@ import java.util.Arrays;
 public class CompletionRequest {
 
     public CompletionRequest(@NotNull AppSettingsState config) {
-        this("", config.temperature, config.maxTokens, null);
+        this("",  config.maxTokens);
     }
 
     @NotNull
@@ -25,7 +25,7 @@ public class CompletionRequest {
         if (!(this instanceof CompletionRequestWithModel)) {
             AppSettingsState settingsState = AppSettingsState.getInstance();
             if (!settingsState.devActions) {
-                withModel = new CompletionRequestWithModel(this, settingsState.model_completion);
+                withModel = new CompletionRequestWithModel(this);
             } else {
                 withModel = showModelEditDialog();
             }
@@ -39,8 +39,8 @@ public class CompletionRequest {
 
         public String model;
 
-        public CompletionRequestWithModel(String prompt, double temperature, int max_tokens, Integer logprobs, boolean echo, String model, CharSequence... stop) {
-            super(prompt, temperature, max_tokens, logprobs, stop);
+        public CompletionRequestWithModel(String prompt, int max_tokens,  boolean echo, CharSequence... stop) {
+            super(prompt, max_tokens, stop);
             this.model = model;
         }
 
@@ -49,9 +49,8 @@ public class CompletionRequest {
             this.model = other.model;
         }
 
-        public CompletionRequestWithModel(@NotNull CompletionRequest other, String model) {
+        public CompletionRequestWithModel(@NotNull CompletionRequest other) {
             super(other);
-            this.model = model;
         }
 
         public void fixup(@NotNull AppSettingsState settings) {
@@ -73,12 +72,9 @@ public class CompletionRequest {
     public String prompt;
     public @Nullable String suffix = null;
     @SuppressWarnings("unused")
-    public double temperature;
-    @SuppressWarnings("unused")
     public int max_tokens;
     public CharSequence @Nullable [] stop;
-    @SuppressWarnings("unused")
-    public Integer logprobs;
+
     @SuppressWarnings("unused")
     public boolean echo;
 
@@ -86,27 +82,23 @@ public class CompletionRequest {
     public CompletionRequest() {
     }
 
-    public CompletionRequest(String prompt, double temperature, int max_tokens, Integer logprobs, CharSequence... stop) {
+    public CompletionRequest(String prompt, int max_tokens, CharSequence... stop) {
         this.prompt = prompt;
-        this.temperature = temperature;
         this.max_tokens = max_tokens;
         this.stop = stop;
-        this.logprobs = logprobs;
         this.echo = false;
     }
 
     public CompletionRequest(@NotNull CompletionRequest other) {
         this.prompt = other.prompt;
-        this.temperature = other.temperature;
         this.max_tokens = other.max_tokens;
         this.stop = other.stop;
-        this.logprobs = other.logprobs;
         this.echo = other.echo;
     }
 
 
     public @NotNull CompletionRequest appendPrompt(CharSequence prompt) {
-        this.prompt = this.prompt + prompt;
+        this.prompt = this.prompt + "\n"  + prompt;
         return this;
     }
 
@@ -132,7 +124,7 @@ public class CompletionRequest {
     public @NotNull CompletionRequestWithModel showModelEditDialog() {
         @NotNull FormBuilder formBuilder = FormBuilder.createFormBuilder();
         AppSettingsState instance = AppSettingsState.getInstance();
-        @NotNull CompletionRequestWithModel withModel = new CompletionRequestWithModel(this, instance.model_completion);
+        @NotNull CompletionRequestWithModel withModel = new CompletionRequestWithModel(this);
         @NotNull InteractiveCompletionRequest ui = new InteractiveCompletionRequest(withModel);
         UITools.INSTANCE.addFields(ui, formBuilder);
         UITools.INSTANCE.writeUI(ui, withModel);

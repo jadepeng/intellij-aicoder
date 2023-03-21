@@ -84,7 +84,7 @@ class PsiClassContext(val text: String, val isPrior: Boolean, val isOverlap: Boo
                 }
             }
 
-            private fun processChildren(
+            private fun   processChildren(
                 element: PsiElement,
                 self: PsiElementVisitor,
                 isPrior: Boolean,

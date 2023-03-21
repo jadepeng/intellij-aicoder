@@ -19,9 +19,7 @@ public class EditRequest {
     public String input = null;
     @NotNull
     public String instruction;
-    @SuppressWarnings("unused")
-    @Nullable
-    public Double temperature;
+
     @SuppressWarnings("unused")
     @Nullable
     public Integer n = null;
@@ -34,28 +32,15 @@ public class EditRequest {
 
     public EditRequest(@NotNull AppSettingsState settingsState) {
         this.setInstruction("");
-        this.setModel(settingsState.model_edit);
-        this.setTemperature(settingsState.temperature);
     }
 
     public EditRequest(@NotNull String instruction) {
         this.setInstruction(instruction);
-        this.setModel(AppSettingsState.getInstance().model_edit);
-        this.setTemperature(AppSettingsState.getInstance().temperature);
     }
 
     public EditRequest(@NotNull String instruction, @Nullable String input) {
         this.setInput(input);
         this.setInstruction(instruction);
-        this.setModel(AppSettingsState.getInstance().model_edit);
-        this.setTemperature(AppSettingsState.getInstance().temperature);
-    }
-
-    public EditRequest(@NotNull String model, @Nullable String input, @NotNull String instruction, @Nullable Double temperature) {
-        this.setModel(model);
-        this.setInput(input);
-        this.setInstruction(instruction);
-        this.setTemperature(temperature);
     }
 
     public EditRequest(@NotNull EditRequest obj) {
@@ -63,7 +48,6 @@ public class EditRequest {
         this.top_p = obj.top_p;
         this.input = obj.input;
         this.instruction = obj.instruction;
-        this.temperature = obj.temperature;
         this.n = obj.n;
     }
 
@@ -82,29 +66,18 @@ public class EditRequest {
         return this;
     }
 
-    public @NotNull EditRequest setTemperature(Double temperature) {
-        this.top_p = null;
-        this.temperature = temperature;
-        return this;
-    }
 
     public @NotNull EditRequest setN(Integer n) {
         this.n = n;
         return this;
     }
 
-    public @NotNull EditRequest setTop_p(Double top_p) {
-        this.temperature = null;
-        this.top_p = top_p;
-        return this;
-    }
 
     @Override
     public @NotNull String toString() {
         @NotNull String sb = "EditRequest{" + "model='" + model + '\'' +
                 ", input='" + input + '\'' +
                 ", instruction='" + instruction + '\'' +
-                ", temperature=" + temperature +
                 ", n=" + n +
                 ", top_p=" + top_p +
                 '}';

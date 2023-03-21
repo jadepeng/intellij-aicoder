@@ -50,7 +50,7 @@ class PsiClassContextAction : AnAction() {
             computerLanguage
         )
         val request = settings.createTranslationRequest()
-            .setInstruction("Implement " + humanLanguage + " as " + computerLanguage.name + " code")
+            .setInstruction("请实现" + computerLanguage.name + " 代码")
             .setInputType(humanLanguage)
             .setInputAttribute("type", "instruction")
             .setInputText(specification)
@@ -58,12 +58,7 @@ class PsiClassContextAction : AnAction() {
             .setOutputAttrute("type", "code")
             .setOutputAttrute("style", settings.style)
             .buildCompletionRequest()
-            .appendPrompt(
-                """
-                $psiClassContext
-                
-                """.trimIndent()
-            )
+            .appendPrompt(psiClassContext.toString().trim())
         UITools.redoableRequest(request, UITools.getIndent(psiClassContextActionParams.caret), event,
             { newText ->
                 """
